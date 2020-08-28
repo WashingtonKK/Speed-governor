@@ -1,7 +1,0 @@
-Writing a channel feed
-	GET https://api.thingspeak.com/update?api_key=1MCACZ1H1M01ZQAV&field1=0
-
-		(The last value is the field to be sent, here it is 0 )
-
-Reading a channel feed
-	GET https://api.thingspeak.com/channels/1118567/feeds.json?api_key=FRG9R44H1NKEQLWU&results=2
