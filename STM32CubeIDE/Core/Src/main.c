@@ -43,7 +43,18 @@
 UART_HandleTypeDef huart1;
 UART_HandleTypeDef huart2;
 UART_HandleTypeDef huart3;
+HAL_StatusTypeDef available;
+int timeout = 100;
+//uint8_t buffer [10];
+//Creating a pointer --> so that I can have a storage with no initial size
+uint8_t *buffer = null;
 
+uint8_t bufferT [] = "ACTIVITY!!-- in while 2\r\n";
+uint8_t bufferR [] = "ACTIVITY!!-- in while 1\r\n";
+uint8_t debug [] = "Transmitting something \r\n";
+uint8_t buffer2 [10];
+uint8_t received [] = "Received something in huart1, sending it \r\n ";
+uint8_t received2 [] = "Received something in huart2, sending it \r\n ";
 /* USER CODE BEGIN PV */
 
 /* USER CODE END PV */
@@ -60,6 +71,15 @@ static void MX_USART3_UART_Init(void);
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+}
 
 /* USER CODE END 0 */
 
@@ -102,11 +122,19 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* USER CODE END WHILE */
-
-    /* USER CODE BEGIN 3 */
+	// HAL_UART_Transmit(&huart1, debug, sizeof(debug), timeout); // debugging
+	while (HAL_UART_Receive(&huart1, buffer, sizeof(buffer), (timeout)) == HAL_OK) {
+		HAL_UART_Transmit(&huart2, buffer, sizeof(buffer), timeout);
+		HAL_UART_Transmit(&huart1, received, sizeof(received), timeout); //debug
+		HAL_Delay(500); //Half second delay
+		}
+	while (HAL_UART_Receive(&huart2, buffer2, sizeof(buffer2),(timeout)) == HAL_OK) {
+		HAL_UART_Transmit(&huart1, buffer2, sizeof(buffer2), timeout);
+		HAL_UART_Transmit(&huart1, received2, sizeof(received2), timeout); //debug
+		HAL_Delay(500); //Half second delay
+	}
   }
-  /* USER CODE END 3 */
+
 }
 
 /**
